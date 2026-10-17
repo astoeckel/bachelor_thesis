@@ -1,0 +1,90 @@
+%
+% Mathematical Command Definitions
+% Andreas Stöckel
+%
+
+\newcommand{\nok}[2]{{\left(\begin{matrix}{#1}\\{#2}\end{matrix}\right)}}
+\newcommand{\snok}[2]{{\left(\begin{smallmatrix}{#1}\\{#2}\end{smallmatrix}\right)}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\E}{{\mathbb{E}}}
+
+\newcommand{\Var}{{\mathrm{Var}}}
+\newcommand{\p}{\mathbf{p}}
+
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\theta}{\vartheta}
+\renewcommand{\complement}{\mathsf{C}}
+
+\newcommand{\prodset}[2]{\overset{#2}{\underset{#1}{\prod}}}
+
+\newcommand{\lsp}[1]{{\mathcal{L}\left({#1}\right)}}
+\newcommand{\stf}[1]{{\mathcal{T}\left({#1}\right)}}
+
+\newcommand{\limn}{{\lim_{n \to \infty}}}
+\newcommand{\limx}{{\lim_{x \to x_0}}}
+\newcommand{\limm}{\;{\overset{n \to \infty}\longrightarrow}\;}
+\newcommand{\smbox}[1]{{\text{\small{{#1}}}}}
+
+\newcommand{\nfolge}[1]{{\left({#1}_n\right)_{n \in \N}}}
+
+\newcommand{\twoway}[2]{{$\left\{\begin{matrix}\text{#1}\\\text{#2}\end{matrix}\right\}$}}
+
+\newcommand{\mapping}[5]{{\begin{array}{rrcl}{#1}: & {#2} & \longrightarrow & {#3} \\ & {#4} & \mapsto & {#5}\end{array}\;}}
+
+\newcommand{\supr}[2]{\ensuremath{\left\lVert#1\right\lVert_{#2}}}
+
+\newcommand{\indy}[1]{\mathfrak{1}_{#1}}
+
+\newcommand{\pbox}[1]{\parbox[tc]{2cm}{\small{#1}}}
+
+\newcommand{\sumni}{\sum_{n=0}^\infty}
+\newcommand{\intab}{\int_a^b}
+
+\newcommand{\fbeg}[2]{\left.{#1}\right|_{#2}}
+
+\newcommand{\eqs}{\hat=}
+
+\newcommand{\konj}[1]{\overline{#1}}
+
+%\renewcommand{\i}{\mathtt{i}}
+
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\newcommand{\begmat}{\left( \left. \begin{matrix}}
+\newcommand{\vlimat}{\end{matrix} \hspace{0.1cm}\right|  \left. \begin{matrix}}
+\newcommand{\finmat}{\end{matrix}\right. \right)}
+
+\newcommand{\sbegmat}{\left( \left. \begin{smallmatrix}}
+\newcommand{\svlimat}{\end{smallmatrix} \hspace{0.1cm}\right|  \left. \begin{smallmatrix}}
+\newcommand{\sfinmat}{\end{smallmatrix}\right. \right)}
+
+\newcommand{\isom}{\overset\sim=}
+
+\newcommand{\arsin}{\mathrm{arsin}}
+\DeclareMathOperator{\atantwo}{arctan2}
+\newcommand{\im}{\mathrm{im}}
+\newcommand{\Rg}{\mathrm{Rg}}
+\newcommand{\id}{\mathrm{id}}
+\renewcommand{\ker}{\mathrm{ker}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\Eig}{\mathrm{Eig}}
+
+\newcommand{\sign}{\mathrm{sign}}
+
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+\newcommand{\img}[1]{\mathbf{#1}}
+\newcommand{\imgpix}[1]{\mathbf{#1}_{\mathbf{P}}}
+\newcommand{\imgang}[1]{\mathbf{#1}_{\mathbf{S}}}
+
+\let\oldvec=\vec
+\renewcommand{\vec}[1]{{\text{$\oldvec{#1}$}}}
+
+\theoremstyle{remark}
+\newtheorem*{derivation}{Derivation}

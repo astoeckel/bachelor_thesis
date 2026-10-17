@@ -1,0 +1,68 @@
+\chapter{Discussion and conclusion}
+
+In this chapter the results from the previous chapter are discussed, followed by a brief conclusion and an outlook concerning future work.
+
+\section{Discussion}
+
+\subsection{Simulated test runs}
+
+The results of the simulated test runs show that the algorithm presented in this thesis is capable of reconstructing obstacles from a time-series of of spherical panoramic images and fully fulfills the real-time constraints, typically requiring less than $30 \, \mathrm{ms}$ per snapshot on the target platform, an Intel\textregistered\ Atom\texttrademark\ N2600 dual core CPU running at $1{.}60 \, \mathrm{GHz}$.
+
+As expected, the heuristic used in the depth reconstruction stage produces very coarse results: The mean depth reconstruction error ranges from $0.5$ to $0.8 \, \mathrm{m}$. However, the post-processing of the reconstructed landmark points in the local environment map increases the obstacle detection precision by an order of magnitude, allowing the algorithm to detect obstacle points with a median error of about $3 \, \mathrm{cm}$ and mean error of about $6 \, \mathrm{cm}$ if perfect odometry data is available.
+
+The algorithm is unexpectedly robust concerning glossy surfaces, although these were explicitly excluded from the assumptions made in section \ref{sec:assumptions}: The stainless steel table legs in the laboratory scene are correctly detected, and while obstacle points are detected at the edges of the stainless steel refrigerator only, its glossiness does not cause any false positive obstacle points.
+
+The false positive obstacle points in the apartment scene are believed to be caused on the one hand by the virtual camera moving too close to the obstacles ($< 0.15 \, \mathrm{m}$, which is smaller than the distance corresponding to the last flow template) and on the other hand by the error stack bias, which causes local minima belonging to larger distances to be preferred.
+
+The algorithm works best if the obstacles are structured, allowing for a distinct global minimum in the error stack. Unstructured objects, for example the cylinders in the laboratory scene, are only detected at their edges. The algorithm is even capable of precisely reconstructing walls, as soon as those have some visible structure (like the tiled walls in the bathroom).
+
+\subsection{Real-world test}
+
+Earlier tests of the robot under laboratory conditions (results not shown here) have shown that the obstacle detection algorithm is capable of correctly detecting obstacles with no or only few false positives. The relatively poor performance under realistic test conditions is believed to be caused by the following factors:
+\begin{description}
+ \item[Noisy orientation change parameter $\psi$:] This may be caused by the odometry data not being captured synchronously with the snapshots. Especially when the robot is rotating, large deviations in $\psi$ become apparent.
+ \item[Tilting and change in elevation:] In the test room, the edges of the carpet are especially problematic. While small tilt could be avoided by equipping the robot with some kind of mechanical suspension, tilt in critical quantity needs to be detected.
+ \item[Unstructured environment:] The room is relatively sterile featuring only uniformly colored objects.
+\end{description}
+
+The spreading of the reconstructed depth seen in figure \ref{fig:results_real1:c} is partially assumed to be caused by occlusions and by the use of small space-invariant local error propagation matrices: There is no way for the depth reconstruction to decide which parts of the image are connected. Assuming that the uniformly colored background belongs to one of the chair/table legs is perfectly valid. This problem could only be solved by using global optical flow estimates \citep{totalVariation,flowchapter05} which are most likely not suitable for real-time execution on the robot.
+
+However, the extreme impact of noise in $\psi$ as shown in the corresponding experiment provides evidence that hardening the algorithm against this problem will also increase its real-world performance.
+
+\subsection{Detailed experiments}
+
+\paragraph{Error stack bias:} The error stack bias $\tau$ proves to be mandatory for the obstacle-detection algorithm and behaves as intended: The bias promotes landmarks in regions with no visible structure to be classified as far-distance landmarks, which will then be ignored in later stages. The choice of $\tau$ turns out to be uncritical as long as chosen larger than zero.
+
+\paragraph{Coarse to fine search:} The results show that the coarse-to-fine refinement eliminates most artifacts resulting from temporal aliasing in regions with repeating patterns. Depending on the environment this can lead to a significant decrease in the count of false-positive obstacle points. Moreover, the pruning and the limited search range introduced along with the coarse-to-fine refinement reduce the total runtime by almost $50\%$. When comparing depth-reconstruction results, the pruning sometimes appears to be oversensitive, yet the data show that the decrease in the count of true positive obstacle points is negligible.
+
+\paragraph{Noise:} Noise in the orientation change parameter $\psi$ proves to render the depth reconstruction result useless. This can partially be explained by the two following effects:
+\begin{description}
+\item[Reciprocal shift-to-depth function:] As derived in appendix \ref{proof:max_horz_shift}, a horizontal pixel shift $\Delta x$ between two projected landmark points $\vec p_1$ and $\vec p_2$ can approximately be transformed into a landmark distance:
+\begin{align*}
+  r &\approx \frac{w}{2 \pi} \cdot \frac{d}{\Delta x} \; .
+\end{align*}
+If additive noise is superimposed on small $\Delta x$, this results in a large change in $r$.
+\item[Forward search along flow lines:] Another problem concerns the fact that the minimum error search along a flow line --- as performed in the error stack calculation --- is always a forward search. Noise in $\psi$ can cause $\img{CV}$ and $\img{SS}$ to be aligned in such a way that the actual global minimum has already passed (at least in one half of $\img{CV}$). Due to the forward search only the next local minimum can be used.
+\end{description}
+
+\section{Conclusion}
+
+The optimizations presented in this thesis allow to perform obstacle detection based on a time-series of spherical panoramic images while fulfilling the real-time constraint present on the used robot. The results from the simulated test environments prove that the general algorithm is working as intended and the introduced measures allow to verify how changes in the algorithm will effect the overall performance. Yet in order to be usable in arbitrary domestic in-door environments, the reliability of the algorithm needs to be increased.
+
+\section{Outlook}
+
+The following compilation enumerates some future research topics which are either hoped to resolve current issues, to further optimize the runtime requirements, or to be interesting from a scientific point of view.
+
+\paragraph{Hardening against noise in $\psi$:} As the odometry data obtained from the robot turned out to be far from perfect, the algorithm needs to be hardened against noise, especially in the orientation change parameter $\psi$. This problem could be solved in software by either using an image compass or by repeating the depth reconstruction algorithm (up to the minimum error search) for varying $\psi$ and selecting the ``best'' result. The criteria for this choice need to be developed.
+
+\paragraph{Optimization of the landmark selection:} Currently all reconstructed landmarks originating from a single column are inserted into the local obstacle map with equal weight. A further optimization would be to select the prevalent distances from the column and to insert fewer, but weighted landmark points into the obstacle map. The selection could for example be performed by one-dimensional $k$-means.
+
+\paragraph{Combination of multiple depth maps:} Another possible extension would be to reconstruct the depth for multiple snapshots relative to a single current view. The resulting depth maps can then be combined into a single result by calculating the mean distance and pruning regions with high variance in the results. Yet this approach might prove to be difficult due to accumulating odometry errors.
+
+\paragraph{Comparison to existing approaches:} The results of this algorithm need to be compared to competing approaches, including feature based sparse optical flow as introduced in section \ref{sec:existing_solutions}.
+
+\paragraph{Navigation:} It would also be interesting to explore whether the local environment maps and the reconstructed obstacle points can be used for navigation.
+
+\paragraph{GPU implementation:} As the depth reconstruction is intrinsically parallel in every pixel (each pixel only depends on its direct neighbors), a GPU implementation using either the compute languages OpenCL or CUDA, or a GPGPU implementation using OpenGL (or to some degree even OpenGL ES) is believed to be viable.
+
+\paragraph{Color images:} It would be interesting to test the algorithm with color images as input. The availability of color increases the input dimensionality and is expected to allow for fewer ambiguities in the minimum error search.

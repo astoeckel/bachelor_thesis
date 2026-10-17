@@ -1,0 +1,10 @@
+\chapter*{Summary}
+\addcontentsline{toc}{chapter}{Summary}
+
+An important component of mobile robot navigation is obstacle detection. For this purpose, the target robot platform is equipped with a set of static laser diodes and an omnidirectional camera. The usage of only four diodes at a time in conjunction with slow temporal sampling results in a relatively coarse environmental coverage, which causes small and slim objects (like legs of tables or chairs) to be often missed.
+
+A previously developed algorithm is capable of detecting obstacles by analyzing time series of spherical panoramic images using implicit optical flow estimation. The goal of this thesis is to lay the theoretical foundations of the algorithm and to present performance optimizations allowing real-time operation on an embedded system. Moreover, measures for the obstacle detection performance in simulated test runs are developed.
+
+Performance optimization is achieved by a resolution pyramid with coarse-to-fine refinement in the optical flow estimation step, motion field precalculation, as well as the use of single instruction multiple data (SIMD) instruction set extensions in the implementation.
+
+The final implementation fully satisfies the real-time constraint, typically requiring less than $30\,\mathrm{ms}$ for an obstacle detection step on the target system. While tests in simulated environments show that the algorithm is capable of mean obstacle detection errors smaller than $0.06\,\mathrm{m}$, the real-world performance heavily depends on the quality of the input and especially on correct robot orientation estimates.

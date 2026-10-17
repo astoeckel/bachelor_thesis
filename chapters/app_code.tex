@@ -1,0 +1,33 @@
+\chapter{Source code}
+
+This appendix contains some excerpts of the source code at key points in the algorithm. Note that the code has been slightly simplified for illustration purposes. Thus each code snippet is accompanied by a reference to its location in the ``real source code''.
+
+\section{Error stack calculation}
+
+This section contains the code used for the error stack calculation as described in section \ref{sec:error_stack_sse}.
+
+\subsection{Horizontal interpolation}
+
+\label{code:horz_interpolation}
+
+{\footnotesize Code located in \texttt{FlowSIMD-1-0/src/ErrorStack.C::\_ErrorstackInterpolateHorz}}
+
+\lstinputlisting{code/errorstack_horz.c}
+
+\subsection{Vertical interpolation}
+
+\label{code:vert_interpolation}
+
+{\footnotesize Code located in \texttt{FlowSIMD-1-0/src/ErrorStack.C::\_ErrorstackInterpolateVert}}
+
+\lstinputlisting{code/errorstack_vert.c}
+
+\section{Gauss template accumulation}
+
+\label{code:gauss}
+
+{\footnotesize Code located in \texttt{FlowSIMD-1-0/src/ObstacleMap.C::additiveBlitInline}}
+
+This code is used for accumulating the gauss templates at a certain $x$-$y$-position in the local environment map. The attribute \texttt{flip} specifies whether the template is to be placed in quadrants 2 or 4 (see figure \ref{fig:gaussian_distribution_symmetries}).
+
+\lstinputlisting{code/gauss.c}

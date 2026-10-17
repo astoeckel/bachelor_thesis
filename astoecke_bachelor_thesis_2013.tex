@@ -1,0 +1,173 @@
+%
+% Bachelor Thesis
+% ---------------
+%
+% Master File
+%
+% Andreas Stöckel, 2013
+%
+
+\documentclass[a4paper,11pt]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{nicefrac}
+\usepackage{graphicx}
+\usepackage[pdftex,
+            pdfauthor={Andreas Stoeckel},
+            pdftitle={Realtime obstacle detection from optical flow in panoramic images},
+            pdfsubject={Visual navigation},
+            pdfkeywords={obstacle detection, optical flow, panoramic images, omnidirectional images, realtime, depth estimation, structure from motion}
+            ]{hyperref}
+\usepackage[round,colon]{natbib}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage{microtype}
+\usepackage{dpfloat}
+\usepackage{array}
+
+% Code
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{listing}{rgb}{0.95, 0.95, 0.95}
+\definecolor{lst_green}{rgb}{0, 0.5, 0}
+\definecolor{lst_blue}{rgb}{0, 0, 0.5}
+\definecolor{lst_red}{rgb}{0.5, 0.3, 0.1}
+\definecolor{lst_gray}{rgb}{0.35, 0.35, 0.35}
+
+\lstset{
+  language=c,
+  tabsize=2,
+  breaklines=true,
+  postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookrightarrow}},
+  basicstyle=\small\ttfamily,
+  keywordstyle=\color{lst_blue},
+  keywordstyle=[2]\color{lst_red},
+  commentstyle=\color{lst_gray},
+  morekeywords={\_\_m128i},
+  keywords=[2]{\_mm\_load\_si128,\_mm\_store\_si128,\_mm\_shuffle\_epi8,\_mm\_maddubs\_epi16,\_mm\_or\_si128,\_mm\_srai\_epi16,\_mm\_packus\_epi16,\_mm\_set\_epi8,
+  \_mm\_loadu\_si128,\_mm\_srli\_epi16,\_mm\_abs\_epi16,\_mm\_cmpeq\_epi16,\_mm\_sub\_epi16,\_mm\_storeu\_si128,\_mm\_adds\_epi16}
+}
+
+% Description labels
+\renewcommand*{\descriptionlabel}[1]{\hspace\labelsep\normalfont\itshape #1}
+
+
+% Page layout
+\setstocksize{29.7cm}{21cm}
+\settrimmedsize{\stockheight}{\stockwidth}{*}
+\setlrmarginsandblock{4.5cm}{3.5cm}{*}
+\setulmarginsandblock{4.5cm}{4.5cm}{*}
+\checkandfixthelayout
+\pagestyle{ruled}
+
+% Numbering depth (number subsections)
+\setsecnumdepth{subsection}
+
+% Subfigures
+\newsubfloat{figure}
+
+% Title page
+\pretitle{
+\begin{center}
+	\Large
+	Universität Bielefeld\\
+	Technische Fakultät\\
+	AG Technische Informatik
+	\vspace{1.25cm}\\
+	\textsc{Bachelorarbeit}
+	\vspace{0.75cm}\\
+\end{center}
+\hrulefill
+\begin{center}\scshape\Huge}
+\posttitle{\end{center}\hrulefill}
+
+\preauthor{\vspace{0.5cm}\begin{center}\Large}
+\postauthor{\\\vspace{0.25cm}
+\end{center}}
+
+\predate{\begin{center}\Large}
+\postdate{\vspace{1cm}\\
+	\normalsize
+	Im Studiengang\\
+	Kognitive Informatik\\
+	\vspace{1cm}
+	\textbf{Gutachter}\\
+	M.Sc.\ Michael Horst\\
+	M.Sc.\ David Fleer
+	\end{center}}
+
+\captionstyle{\small}
+\captionnamefont{\scshape}
+
+\usepackage[]{todonotes}
+%\newcommand{\todo}[2][\empty]{}
+%\newcommand{\listoftodos}{}{}
+
+\input{mathcmd}
+\newtheorem{theorem}{Theorem}
+
+\title{Realtime obstacle detection from optical flow in panoramic images}
+\author{Andreas Stöckel}
+\date{5. September 2013}
+
+\makeatletter
+\let\insertdate\@date
+\let\insertauthor\@author
+\makeatother
+
+\begin{document}
+
+\begin{titlingpage}
+	\maketitle
+	\thispagestyle{empty}
+	\clearpage
+	\thispagestyle{empty}
+	~~\vspace{15.5cm}\\
+	\textbf{Danksagung}\vspace{0.75cm}\\
+	Danke an meine Betreuer Michael Horst und David Fleer für das widerstandslose Ertragen meiner Berichte über Probleme, die sich im Anschluss daran meist von selbst lösten, zündende Ideen, sowie das Korrekturlesen des Manuskripts. Dank gilt natürlich auch meiner Familie -- insbesondere meinen Eltern -- dafür, mein Exil fernab der Heimat so erträglich wie irgend möglich zu gestalten. Abschließend gilt mein besonderer Dank Herrn Prof.\ Möller für den \textit{Earl Grey} Tee, dessen Superkräfte mich auch zu nachtschlafender Zeit noch arbeiten ließen.
+\end{titlingpage}
+
+\setcounter{tocdepth}{2}
+\tableofcontents*
+
+%\chapter*{Todo}
+%\listoftodos
+
+\include{chapters/chapter_summary}
+\include{chapters/chapter_introduction}
+\include{chapters/chapter_algorithm}
+\include{chapters/chapter_algorithm_extensions}
+\include{chapters/chapter_algorithm_implementation}
+\include{chapters/chapter_experiments}
+\include{chapters/chapter_conclusion}
+
+\begin{appendix}
+\include{chapters/app_proofs}
+\include{chapters/app_extensions}
+\include{chapters/app_code}
+\end{appendix}
+
+
+\bibliography{bibliography}
+\bibliographystyle{plainnat}
+
+\cleardoublepage
+
+\pagestyle{empty}
+
+Hiermit versichere ich, dass ich diese Bachelorarbeit selbständig bearbeitet habe. Ich habe keine anderen als die angegebenen Quellen und Hilfsmittel benutzt und entsprechende Zitate kenntlich gemacht.
+\begin{center}
+\vspace{1.5cm}
+\begin{tabular}{l l l}
+  Bielefeld, \insertdate & \hspace{0.5cm} & \hspace{6.5cm} \\
+  \hline
+  \footnotesize \textsc{Datum} & & \footnotesize \textsc{\insertauthor}
+\end{tabular}
+\end{center}
+
+\end{document}
